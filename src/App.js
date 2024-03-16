@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 
 const tempMovieData = [
@@ -54,22 +55,33 @@ export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   return (
     <>
-      <Navbar movies={movies} />
-      <Main movies={movies} />
+      <Navbar>
+        <Search />
+        <NumResults movies={movies} />
+      </Navbar>
+      <Main>
+        <ListBox>
+          <MovieList movies={movies} />
+        </ListBox>
+        <WatchBox />
+      </Main>
     </>
   );
 }
 
-function Navbar({ movies }) {
-  const [query, setQuery] = useState("");
+function Navbar(props) {
+  const { children } = props;
   return (
     <nav className="nav-bar">
       <Logo />
-      <Search query={query} setQuery={setQuery} />
-      <NumResults movies={movies} />
+      {children}
     </nav>
   );
 }
+
+Navbar.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 function Logo() {
   return (
@@ -80,7 +92,8 @@ function Logo() {
   );
 }
 
-function Search({ query, setQuery }) {
+function Search() {
+  const [query, setQuery] = useState("");
   return (
     <input
       className="search"
@@ -100,16 +113,15 @@ function NumResults({ movies }) {
   );
 }
 
-function Main({ movies }) {
-  return (
-    <main className="main">
-      <ListBox movies={movies} />
-      <WatchBox />
-    </main>
-  );
+NumResults.propTypes = {
+  movies: PropTypes.array.isRequired,
+};
+
+function Main({ children }) {
+  return <main className="main">{children}</main>;
 }
 
-function ListBox({ movies }) {
+function ListBox({ children }) {
   const [isOpen1, setIsOpen1] = useState(true);
   return (
     <div className="box">
@@ -119,7 +131,7 @@ function ListBox({ movies }) {
       >
         {isOpen1 ? "–" : "+"}
       </button>
-      {isOpen1 && <MovieList movies={movies} />}
+      {isOpen1 && children}
     </div>
   );
 }
