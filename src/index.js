@@ -13,6 +13,7 @@ function Test() {
         className={"test"}
         message={["Terrible", "Bad", "Okay", "Good", "Amazing"]}
         onSetRating={setRating}
+        defaultRating={3}
       />
       <p>This movie has {movieRating} rating</p>
     </div>
